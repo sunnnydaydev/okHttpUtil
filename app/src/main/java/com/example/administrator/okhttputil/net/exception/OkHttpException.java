@@ -4,7 +4,6 @@ package com.example.administrator.okhttputil.net.exception;
  * Create by SunnyDay on 2019/03/05
  */
 public class OkHttpException extends Exception {
-    private static final long serialVersionUID = 1l;
 
     private int ecode;// 服务端返回码
     private Object emsg;// 服务端返回信息

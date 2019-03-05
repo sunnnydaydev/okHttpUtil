@@ -1,7 +1,4 @@
 package com.example.administrator.okhttputil.net.request;
-
-import android.util.Log;
-
 import java.util.Map;
 
 import okhttp3.FormBody;
@@ -38,7 +35,7 @@ public class CommonRequest {
      *     通过url+请求参数的拼接 成我们的get请求url，在生成Request请求
      *
      *               get url 的方式  域名 ？ key = value & key = value ......
-     *
+     *   有参数就拼接url再请求， 没有参数就使用给的拼接好的url
      */
     public static Request createGetRequest(String url, RequestParams params){
         StringBuilder sb = new StringBuilder(url).append("?");
@@ -49,10 +46,17 @@ public class CommonRequest {
                        .append(entry.getValue())
                        .append("&");
             }
+            String disposedUrl = sb.toString().substring(sb.length()-1);// 去掉最后一个多余的&字符串
+            return new Request.Builder()
+                    .url(disposedUrl)
+                    .get()
+                    .build();
+        }else{
+            return new Request.Builder()
+                    .url(url)
+                    .get()
+                    .build();
         }
-        return new Request.Builder()
-                .url(sb.substring(0,sb.length()-1))
-                .get()
-                .build();
+
     }
 }

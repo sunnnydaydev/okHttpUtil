@@ -20,10 +20,6 @@ import okhttp3.Response;
  * Create by SunnyDay on 2019/03/05
  */
 public class CommonJsonCallback implements Callback {
-    protected final String RESULT_CODE = "ecode";
-    protected final int RESULT_CODE_VALUE = 0;
-    protected final String ERROR_MSG = "emsg";
-    protected final String EMPTY_MSG = "";
 
     /**
      * 自定义类型异常
@@ -51,13 +47,13 @@ public class CommonJsonCallback implements Callback {
         mDeliveryHandler.post(new Runnable() {
             @Override
             public void run() {
-                mlistener.onFailure(new OkHttpException(NETWORK_ERROR, e));
+                mlistener.onFailure(new OkHttpException(NETWORK_ERROR, e.getMessage()));
             }
         });
     }
 
     /**
-     * 真正的响应处理
+     * 请求成功回调
      */
     @Override
     public void onResponse(Call call, Response response) throws IOException {
@@ -70,34 +66,34 @@ public class CommonJsonCallback implements Callback {
         });
     }
 
-    private void handleResponse(Object responseObj) {
-        if (responseObj == null && responseObj.toString().trim().equals("")) {
-            mlistener.onFailure(new OkHttpException(NETWORK_ERROR, EMPTY_MSG));
+    /**
+     * 处理json数据
+     *
+     * @param responseObj json字符串
+     */
+    private void handleResponse(String responseObj) {
+        // 判空处理
+        if (responseObj == null && responseObj.trim().equals("")) {
+            mlistener.onFailure(new OkHttpException(NETWORK_ERROR, "net work error"));
             return;
         }
         try {
-            JSONObject result = new JSONObject(responseObj.toString());
-            if (result.has(RESULT_CODE)) {
-                if (result.getInt(RESULT_CODE) == RESULT_CODE_VALUE) {
-                    if (mClass == null) {
-                        mlistener.onSuccess(responseObj);
-                    } else {
-                        // 转化为实体
-                        Gson gson = new Gson();
-                        Object obj = gson.fromJson(responseObj.toString(), mClass);
-                        if (obj != null) {
-                            mlistener.onSuccess(obj);
-                        } else {
-                            // 不是合法的json
-                            mlistener.onFailure(new OkHttpException(JSON_ERROR, EMPTY_MSG));
-                        }
-                    }
+            if (mClass == null) {
+                // 用户不想让我们处理json，直接回传给用户
+                mlistener.onSuccess(responseObj);
+            } else {
+                // 我们处理把json转化为实体
+                Gson gson = new Gson();
+                Object obj = gson.fromJson(responseObj, mClass);
+                if (obj != null) {
+                    mlistener.onSuccess(obj);
+                } else {
+                    // 不是合法的json
+                    mlistener.onFailure(new OkHttpException(JSON_ERROR, "illegal json"));
                 }
-            }else{
-                 mlistener.onFailure(new OkHttpException(OTHER_ERROR,result.get(RESULT_CODE)));
             }
         } catch (Exception e) {
-           mlistener.onFailure(new OkHttpException(OTHER_ERROR,e.getMessage()));
+            mlistener.onFailure(new OkHttpException(OTHER_ERROR, e.getMessage()));
         }
     }
 }

@@ -1,11 +1,11 @@
-package com.example.administrator.okhttputil;
+package com.example.administrator.okhttputil.test;
 
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.administrator.okhttputil.R;
 import com.example.administrator.okhttputil.net.CommonOkHttpClient;
 import com.example.administrator.okhttputil.net.listener.DisposeDataHandle;
 import com.example.administrator.okhttputil.net.listener.DisposeDataListener;
@@ -13,8 +13,6 @@ import com.example.administrator.okhttputil.net.request.CommonRequest;
 import com.example.administrator.okhttputil.net.response.CommonJsonCallback;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -32,21 +30,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         CommonOkHttpClient
-                .sendRequest(CommonRequest.createGetRequest("http://www.wanandroid.com/tools/mockapi/7751/getmoneyfailed", null),new CommonJsonCallback(new DisposeDataHandle(new DisposeDataListener() {
+                .sendRequest(CommonRequest.createGetRequest("http://www.wanandroid.com/tools/mockapi/7751/getmoneyfailed", null), new CommonJsonCallback(new DisposeDataHandle(new DisposeDataListener() {
                     @Override
                     public void onSuccess(Object responseObj) {
-                        Log.i(TAG, "onSuccess: "+responseObj.toString());
+                        TestBean testBean = (TestBean) responseObj;
+                        Toast.makeText(MainActivity.this, testBean.getButtonName(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailure(Object reasonObj) {
-
+                        Log.i(TAG, "onSuccess: " + reasonObj.toString());
                     }
-                })));
+                },TestBean.class)));
     }
+
     /**
      * 同步get请求
-     *
+     * <p>
      * 发送请求后就会进入阻塞状态（阻塞当前线程）  直到收到响应
      */
     private void getSync() {
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     // 3 Call 为接口  具体实现类是 realcall
                     Call call = client.newCall(request);// call 可以看做response 和request的连接桥梁
 
-                   // 4 同步 异步的前三步一样  第四步开始不同
+                    // 4 同步 异步的前三步一样  第四步开始不同
                     Response response = call.execute();
                     if (response.isSuccessful()) {
                         // Log.i(TAG, "返回码 " + response.code());
@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 异步get请求
-     *
+     * <p>
      * 不阻塞当前线程 enqueue在子线程中进行
-     * */
+     */
     private void getAsync() {
         //1
         OkHttpClient client = new OkHttpClient();
