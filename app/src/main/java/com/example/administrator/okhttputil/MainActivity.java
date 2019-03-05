@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.administrator.okhttputil.net.CommonOkHttpClient;
 import com.example.administrator.okhttputil.net.request.CommonRequest;
 
 import java.io.IOException;
@@ -27,6 +28,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        CommonOkHttpClient
+                .sendRequest(CommonRequest.createGetRequest("https://www.baidu.com", null), new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Log.i(TAG, "onResponse: "+response.body().string());
+                    }
+                });
 
     }
     /**
