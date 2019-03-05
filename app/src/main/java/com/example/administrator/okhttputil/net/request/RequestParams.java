@@ -20,9 +20,8 @@ public class RequestParams {
     public ConcurrentHashMap<String, String> urlParams = new ConcurrentHashMap<>();
     public ConcurrentHashMap<String, Object> fileParams = new ConcurrentHashMap<>();
 
-
     /**
-     * @function 构造器 传参数存入集合
+     * @function 构造器 吧用户传来map类型的参数存入我们的集合
      * @param source  map类型参数
      * */
     public RequestParams(Map<String, String> source) {
@@ -34,24 +33,29 @@ public class RequestParams {
         }
     }
 
+    /**
+     * @function 构造器 接收 String类型的key value 请求参数 存入集合
+     * */
     public RequestParams(final String key, final String value) {
-        // 参考 友情链接
+        // 参考 类注释的友情链接
         this(new HashMap<String, String>() {
             {
                 put(key, value);
             }
         });
-
     }
 
+    /**
+     * @function 空请求参数
+     * */
     public RequestParams() {
         this((Map<String, String>) null);
     }
 
     /**
      * @function key value 放入hashmap
-     * @param key key
-     * @param value value
+     * @param key 请求参数key
+     * @param value 请求参数value
      */
     public void put(String key, String value) {
         if (key != null && value != null) {
@@ -60,9 +64,9 @@ public class RequestParams {
     }
 
     /**
-     * @function 吧文件存入集合
-     * @param key key
-     * @param object obj
+     * @function 吧请求参数存入集合
+     * @param key 请求参数key
+     * @param object 请求参数obj
      * */
     public void put(String key, Object object) throws FileNotFoundException {
         if (key != null) {
