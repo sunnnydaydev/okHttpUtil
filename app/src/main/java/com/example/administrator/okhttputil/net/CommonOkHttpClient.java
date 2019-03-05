@@ -1,6 +1,7 @@
 package com.example.administrator.okhttputil.net;
 
 import com.example.administrator.okhttputil.net.https.HttpsUtils;
+import com.example.administrator.okhttputil.net.response.CommonJsonCallback;
 
 import java.util.concurrent.TimeUnit;
 
@@ -48,9 +49,9 @@ public class CommonOkHttpClient {
      * @return call
      *
      * */
-    public static Call sendRequest(Request request, Callback commCallback) {
+    public static Call sendRequest(Request request, CommonJsonCallback commCallback) {
         Call call = okHttpClient.newCall(request);
-        call.enqueue(commCallback);
+        call.enqueue((Callback) commCallback);
         return call;
     }
 }

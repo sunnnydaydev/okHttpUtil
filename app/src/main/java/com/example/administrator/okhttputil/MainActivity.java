@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.administrator.okhttputil.net.CommonOkHttpClient;
+import com.example.administrator.okhttputil.net.listener.DisposeDataHandle;
+import com.example.administrator.okhttputil.net.listener.DisposeDataListener;
 import com.example.administrator.okhttputil.net.request.CommonRequest;
+import com.example.administrator.okhttputil.net.response.CommonJsonCallback;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,18 +32,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         CommonOkHttpClient
-                .sendRequest(CommonRequest.createGetRequest("https://www.baidu.com", null), new Callback() {
+                .sendRequest(CommonRequest.createGetRequest("http://www.wanandroid.com/tools/mockapi/7751/getmoneyfailed", null),new CommonJsonCallback(new DisposeDataHandle(new DisposeDataListener() {
                     @Override
-                    public void onFailure(Call call, IOException e) {
-
+                    public void onSuccess(Object responseObj) {
+                        Log.i(TAG, "onSuccess: "+responseObj.toString());
                     }
 
                     @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        Log.i(TAG, "onResponse: "+response.body().string());
-                    }
-                });
+                    public void onFailure(Object reasonObj) {
 
+                    }
+                })));
     }
     /**
      * 同步get请求
