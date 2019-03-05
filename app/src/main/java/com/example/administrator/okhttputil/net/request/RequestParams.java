@@ -38,12 +38,11 @@ public class RequestParams {
      */
     public RequestParams(final String key, final String value) {
         // 参考 类注释的友情链接
-//        this(new HashMap<String, String>() {
-//            {
-//                put(key, value);
-//            }
-//        });
-        put(key, value);
+        this(new HashMap<String, String>() {
+            {
+                put(key, value);
+            }
+        });
 
 
     }

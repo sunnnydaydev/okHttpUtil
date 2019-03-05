@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Object responseObj) {
                         TestBean testBean = (TestBean) responseObj;
-                        Toast.makeText(MainActivity.this, testBean.getButtonName(), Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "onSuccess: "+testBean.getButtonName());
+                        //okhttputil I/abc: onSuccess: 我知道了
                     }
 
                     @Override
