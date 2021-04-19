@@ -12,6 +12,7 @@ import javax.net.ssl.X509TrustManager
  * Created by zb on 2021/3/31 16:06
  */
 object HttpUtils {
+
     fun getSslSocketFactory(): SSLSocketFactory {
         val manager: X509TrustManager = object : X509TrustManager {
             override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
