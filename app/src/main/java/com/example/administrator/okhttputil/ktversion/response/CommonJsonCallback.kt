@@ -56,7 +56,7 @@ class CommonJsonCallback(
 
             try {
                 val gson = Gson()
-                val obj = gson.fromJson<AppUpdateInfo>(jsonStr, mClass)
+                val obj = gson.fromJson(jsonStr, mClass)
                 if (obj != null) {
                     listener.onSuccess(obj)
                 } else {
